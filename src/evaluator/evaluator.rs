@@ -54,7 +54,7 @@ fn evaluate_logical_expr(
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l || *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Logical(op.clone()),
+                Op::Logical(*op),
                 rhs.clone(),
             )),
         },
@@ -62,7 +62,7 @@ fn evaluate_logical_expr(
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l && *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Logical(op.clone()),
+                Op::Logical(*op),
                 rhs.clone(),
             )),
         },
@@ -80,7 +80,7 @@ fn evaluate_equality_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l == *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Equality(op.clone()),
+                Op::Equality(*op),
                 rhs.clone(),
             )),
         },
@@ -89,7 +89,7 @@ fn evaluate_equality_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l != *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Equality(op.clone()),
+                Op::Equality(*op),
                 rhs.clone(),
             )),
         },
@@ -99,7 +99,7 @@ fn evaluate_equality_expr(
             (Value::Bool(_), Value::Array(r)) => Ok(Value::Bool(r.contains(lhs))),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Equality(op.clone()),
+                Op::Equality(*op),
                 rhs.clone(),
             )),
         },
@@ -117,7 +117,7 @@ fn evaluate_relational_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l > *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Relational(op.clone()),
+                Op::Relational(*op),
                 rhs.clone(),
             )),
         },
@@ -126,7 +126,7 @@ fn evaluate_relational_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l >= *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Relational(op.clone()),
+                Op::Relational(*op),
                 rhs.clone(),
             )),
         },
@@ -135,7 +135,7 @@ fn evaluate_relational_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l < *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Relational(op.clone()),
+                Op::Relational(*op),
                 rhs.clone(),
             )),
         },
@@ -144,7 +144,7 @@ fn evaluate_relational_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l <= *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Relational(op.clone()),
+                Op::Relational(*op),
                 rhs.clone(),
             )),
         },
@@ -161,7 +161,7 @@ fn evaluate_additive_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Number(*l + *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Additive(op.clone()),
+                Op::Additive(*op),
                 rhs.clone(),
             )),
         },
@@ -169,7 +169,7 @@ fn evaluate_additive_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Number(*l - *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Additive(op.clone()),
+                Op::Additive(*op),
                 rhs.clone(),
             )),
         },
@@ -186,7 +186,7 @@ fn evaluate_multiplicative_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Number(*l * *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Multiplicative(op.clone()),
+                Op::Multiplicative(*op),
                 rhs.clone(),
             )),
         },
@@ -194,7 +194,7 @@ fn evaluate_multiplicative_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Number(*l / *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Multiplicative(op.clone()),
+                Op::Multiplicative(*op),
                 rhs.clone(),
             )),
         },
@@ -202,7 +202,7 @@ fn evaluate_multiplicative_expr(
             (Value::Number(l), Value::Number(r)) => Ok(Value::Number(*l % *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
-                Op::Multiplicative(op.clone()),
+                Op::Multiplicative(*op),
                 rhs.clone(),
             )),
         },
