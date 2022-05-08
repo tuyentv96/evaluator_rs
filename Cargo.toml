@@ -4,11 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[workspace]
-members = ["parser", "ast", "evaluator"]
+# [workspace]
+# members = ["parser", "ast", "evaluator"]
+
+[build-dependencies] # <-- We added this and everything after!
+lalrpop = "0.19.7"
 
 [dependencies]
-parser = {path = "./parser"}
-ast = {path = "./ast"}
-evaluator = {path = "./evaluator"}
+lalrpop-util = { version = "^0.19", features = ["lexer"] }
+regex = "1"
+thiserror = "1.0.31"
 

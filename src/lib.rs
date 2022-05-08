@@ -1,3 +1,11 @@
-pub use ast::{Expr, Value};
-pub use evaluator::{evaluate, EvaluatorError};
-pub use parser::{parse_expr, ParserError};
+#![allow(unused)]
+#[macro_use]
+extern crate lalrpop_util;
+
+mod ast;
+mod evaluator;
+mod parser;
+
+pub use ast::value::Value;
+pub use evaluator::evaluator::{evaluate, EvaluatorError};
+pub use parser::parser::{parse_expr, ParserError};

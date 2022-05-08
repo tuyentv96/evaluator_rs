@@ -21,10 +21,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ast"
-version = "0.1.0"
-
-[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -117,21 +113,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "evaluator"
-version = "0.1.0"
-dependencies = [
- "ast",
- "parser",
- "thiserror",
-]
-
-[[package]]
 name = "evaluator_rs"
 version = "0.1.0"
 dependencies = [
- "ast",
- "evaluator",
- "parser",
+ "lalrpop",
+ "lalrpop-util",
+ "regex",
+ "thiserror",
 ]
 
 [[package]]
@@ -281,17 +269,6 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-sys",
-]
-
-[[package]]
-name = "parser"
-version = "0.1.0"
-dependencies = [
- "ast",
- "lalrpop",
- "lalrpop-util",
- "regex",
- "thiserror",
 ]
 
 [[package]]

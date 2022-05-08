@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use crate::ast;
+use crate::ast::expr::Expr;
 
 #[derive(Error, Debug)]
 pub enum ParserError {
@@ -8,9 +8,9 @@ pub enum ParserError {
     InvalidExpr(String),
 }
 
-lalrpop_mod!(pub grammar);
+lalrpop_mod!(pub grammar, "/parser/grammar.rs");
 
-pub fn parse_expr(expr_str: &str) -> Result<Box<ast::Expr>, ParserError> {
+pub fn parse_expr(expr_str: &str) -> Result<Box<Expr>, ParserError> {
     match grammar::ExprParser::new().parse(expr_str) {
         Ok(v) => Ok(v),
         Err(e) => Err(ParserError::InvalidExpr(e.to_string())),

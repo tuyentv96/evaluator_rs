@@ -1,8 +1,11 @@
-use crate::ast::{AdditiveOp, EqualityOp, Expr, LogicalOp, MultiplicativeOp, Op, Value};
 use std::collections::HashMap;
-
-use ast::RelationalOp;
 use thiserror::Error;
+
+use crate::ast::{
+    expr::Expr,
+    op::{AdditiveOp, EqualityOp, LogicalOp, MultiplicativeOp, Op, RelationalOp},
+    value::Value,
+};
 
 #[derive(Error, Debug, PartialEq)]
 pub enum EvaluatorError {
@@ -209,7 +212,8 @@ fn evaluate_multiplicative_expr(
 #[cfg(test)]
 mod tests {
     use super::EvaluatorError;
-    use parser::ast::Value;
+    use crate::parser::parser;
+    use crate::Value;
     use std::collections::HashMap;
 
     #[allow(dead_code)]
