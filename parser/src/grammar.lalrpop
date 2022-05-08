@@ -1,0 +1,92 @@
+use std::str::FromStr;
+use crate::ast::{Expr, Op, LogicalOp, EqualityOp, Value, AdditiveOp, MultiplicativeOp, RelationalOp};
+use crate::parser::parse_parameter_name;
+
+grammar;
+
+pub Expr: Box<Expr> = {
+    Expr LogicalOp EqualityExpr => Box::new(Expr::Op(<>)),
+    EqualityExpr,
+};
+
+pub EqualityExpr: Box<Expr> = {
+    EqualityExpr EqualityOp AdditiveExpr => Box::new(Expr::Op(<>)),
+    EqualityExpr RelationalOp AdditiveExpr => Box::new(Expr::Op(<>)),
+    AdditiveExpr,
+}
+
+pub AdditiveExpr: Box<Expr> = {
+    AdditiveExpr AdditiveOp MultiplicativeExpr => Box::new(Expr::Op(<>)),
+    MultiplicativeExpr,
+}
+
+pub MultiplicativeExpr: Box<Expr> = {
+    MultiplicativeExpr MultiplicativeOp Term => Box::new(Expr::Op(<>)),
+    Term,
+}
+
+LogicalOp: Op = {
+    "&&" => Op::Logical(LogicalOp::And),
+    "||" => Op::Logical(LogicalOp::Or),
+};
+
+EqualityOp: Op = {
+    "==" => Op::Equality(EqualityOp::Eq),
+    "!=" => Op::Equality(EqualityOp::Neq),
+    "in" => Op::Equality(EqualityOp::In),
+};
+
+RelationalOp: Op = {
+    ">" => Op::Relational(RelationalOp::Gt),
+    "<" => Op::Relational(RelationalOp::Lt),
+    ">=" => Op::Relational(RelationalOp::Gte),
+    "<=" => Op::Relational(RelationalOp::Lte),
+};
+
+AdditiveOp: Op = {
+    "+" => Op::Additive(AdditiveOp::Add),
+    "-" => Op::Additive(AdditiveOp::Sub),
+};
+
+MultiplicativeOp: Op = {
+    "*" => Op::Multiplicative(MultiplicativeOp::Mul),
+    "/" => Op::Multiplicative(MultiplicativeOp::Div),
+    "%" => Op::Multiplicative(MultiplicativeOp::Mod),
+};
+
+Value: Value = {
+    StringValue => Value::String(<>),
+    NumberValue => Value::Number(<>),
+    BoolValue => Value::Bool(<>),
+}
+
+Term: Box<Expr> = {
+    Value => Box::new(Expr::Value(<>)),
+    Array<Value> => Box::new(Expr::Value(Value::Array(<>))),
+    Identifier => Box::new(Expr::Identifier(parse_parameter_name(&<>))),
+    "(" <Expr> ")",
+}
+
+Array<T>: Vec<T> = {
+    "[" <v:(<T> ",")*> <e:T?> "]" => match e {
+        None => v,
+        Some(e) => {
+            let mut v = v;
+            v.push(e);
+            v
+        }
+    }
+};
+
+Identifier: String = r#"\{[a-z][a-z0-9_]*\}"# => <>.to_string();
+BoolValue: bool = {
+    "true" => true,
+    "false" => false,
+}
+NumberValue: f64 = {
+    FloatValue,
+    IntegerValue => <> as f64,
+}
+StringValue: String = r#"'[^']*'"# => <>.to_string();
+IntegerValue: i64 = r#"[0-9]+"# => i64::from_str(<>).unwrap();
+FloatValue: f64 = r#"[0-9]+\.[0-9]+"# => f64::from_str(<>).unwrap();
