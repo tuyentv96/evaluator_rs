@@ -26,7 +26,7 @@ impl Debug for Value {
 /// # Examples
 ///
 /// ```
-/// use evaluator_rs::Value;
+/// use ast::Value;
 ///
 /// let s: String = "hello".to_string();
 /// let x: Value = s.into();
@@ -42,9 +42,9 @@ impl From<String> for Value {
 /// # Examples
 ///
 /// ```
-/// use evaluator_rs::Value;
+/// use ast::Value;
 ///
-/// let s: str = "hello";
+/// let s: &str = "hello";
 /// let x: Value = s.into();
 /// ```
 impl From<&str> for Value {
@@ -58,7 +58,7 @@ impl From<&str> for Value {
 /// # Examples
 ///
 /// ```
-/// use evaluator_rs::Value;
+/// use ast::Value;
 ///
 /// let f: f64 = 1.2;
 /// let x: Value = f.into();
@@ -74,7 +74,7 @@ impl From<f64> for Value {
 /// # Examples
 ///
 /// ```
-/// use evaluator_rs::Value;
+/// use ast::Value;
 ///
 /// let f: f64 = 1.2;
 /// let x: Value = f.into();
@@ -90,7 +90,7 @@ impl From<f32> for Value {
 /// # Examples
 ///
 /// ```
-/// use evaluator_rs::Value;
+/// use ast::Value;
 ///
 /// let i: i64 = 123;
 /// let x: Value = i.into();
@@ -106,7 +106,7 @@ impl From<i64> for Value {
 /// # Examples
 ///
 /// ```
-/// use evaluator_rs::Value;
+/// use ast::Value;
 ///
 /// let i: i32 = 123;
 /// let x: Value = i.into();
@@ -122,7 +122,7 @@ impl From<i32> for Value {
 /// # Examples
 ///
 /// ```
-/// use evaluator_rs::Value;
+/// use ast::Value;
 ///
 /// let b: bool = true;
 /// let x: Value = b.into();

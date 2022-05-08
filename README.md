@@ -1,7 +1,7 @@
 # evaluator_rs
 [![evaluator_rs](https://github.com/tuyentv96/evaluator_rs/actions/workflows/.test.yml/badge.svg)](https://github.com/tuyentv96/evaluator_rs/actions/workflows/.test.yml) [![codecov](https://codecov.io/gh/tuyentv96/evaluator_rs/branch/master/graph/badge.svg?token=VIyh6tcPDv)](https://codecov.io/gh/tuyentv96/evaluator_rs)
 
-A evaluate engine library for Rust.
+A evaluation engine library for Rust.
 
 ## Usage
 
@@ -14,7 +14,7 @@ Add to your `Cargo.toml`:
 evaluator_rs = "0.1.0"
 ```
 
-## Operators
+## Supported operators
 
 | Operator | Description |
 |----------|-------------|
