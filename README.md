@@ -6,12 +6,12 @@
 | Operator | Description |
 |----------|-------------|
 | && | And |
-| || | Or |
+| \|| | Or |
 | == | Equal |
 | > | Greater than |
 | >= | Greater than or equal |
 | < | Lower than |
-| <= | Lower than or qual |
+| <= | Lower than or equal |
 | + | Sum |
 | - | Sub |
 | * | Product |
