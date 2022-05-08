@@ -1,6 +1,5 @@
 // auto-generated: "lalrpop 0.19.7"
-// sha3: e2c6c158ad4bf87a012249983e9019b288596524112ea16ecfaecefa747c
-#![allow(clippy)]
+// sha3: b16be17c7f3d3ca4a3835c5359b4ebfba5b7a6b61dd5f8fe16a778be6a4c1965
 use std::str::FromStr;
 use crate::ast::{
     expr::Expr,
