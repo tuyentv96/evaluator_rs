@@ -6,7 +6,7 @@
 | Operator | Description |
 |----------|-------------|
 | && | And |
-| \|| | Or |
+| \|\| | Or |
 | == | Equal |
 | > | Greater than |
 | >= | Greater than or equal |
