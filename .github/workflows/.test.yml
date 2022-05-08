@@ -6,7 +6,7 @@
 
 on: [push, pull_request]
 
-name: Evaluator
+name: evaluator_rs
 
 jobs:
   test:
