@@ -1,82 +1,15 @@
-name: Continuous Integration
+name: Coverage
 
 on: [push, pull_request]
 
 jobs:
-  build_test_format_lint:
-    name: ${{matrix.command.name}} (${{matrix.toolchain}})
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        toolchain: [stable, beta, nightly, 1.46.0]
-        command:
-          - name: Check
-            command: check
-            args: --all-features
-            components: ""
-          - name: Test
-            command: test
-            args: --all-features
-            components: ""
-        include:
-          - toolchain: nightly
-            command:
-              name: Format
-              command: fmt
-              args: --all -- --check
-              components: rustfmt
-          - toolchain: nightly
-            command:
-              name: Lint
-              command: clippy
-              args: --all-features --tests --benches
-              components: clippy
-          - toolchain: stable
-            command:
-              name: Sync readme
-              command: sync-readme
-              args: --check
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: ⚡ Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ matrix.toolchain }}
-          override: true
-          default: true
-          components: ${{matrix.command.components}}
-
-      - name: Install cargo-sync-readme
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: cargo-sync-readme
-
-      - name: ${{matrix.command.name}}
-        uses: actions-rs/cargo@v1
-        with:
-          command: ${{matrix.command.command}}
-          args: ${{matrix.command.args}}
-
   coveralls_io:
     name: Coverage
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: ⚡ Cache
+      - name: Cache
         uses: actions/cache@v2
         with:
           path: |
