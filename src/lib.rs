@@ -6,6 +6,6 @@ mod ast;
 mod evaluator;
 mod parser;
 
-pub use ast::value::Value;
+pub use ast::{expr::Expr, value::Value};
 pub use evaluator::evaluator::{evaluate, EvaluatorError};
 pub use parser::parser::{parse_expr, ParserError};
