@@ -211,7 +211,7 @@ fn evaluate_multiplicative_expr(
 
 #[cfg(test)]
 mod tests {
-    use super::EvaluatorError;
+    use super::*;
     use crate::parser::parser;
     use crate::Value;
     use std::collections::HashMap;
@@ -560,6 +560,31 @@ mod tests {
             TestCase {
                 expr: "(1 + 2) * 3",
                 want: Ok(Value::from(9)),
+            },
+        ];
+        test_cases.iter().for_each(|case| {
+            let expr = parser::parse_expr(case.expr).unwrap();
+            let output = super::evaluate(&expr, &empty_parameters);
+            assert_eq!(case.want, output, "expr: {}", case.expr);
+        });
+    }
+
+    #[test]
+    fn test_evaluate_invalid_expr() {
+        let empty_parameters: HashMap<String, Value> = HashMap::new();
+
+        let test_cases: Vec<TestCase> = vec![
+            TestCase {
+                expr: "1 && 2",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Logical(LogicalOp::And),
+                    Value::from(2),
+                )),
+            },
+            TestCase {
+                expr: "{a} + 1",
+                want: Err(EvaluatorError::InvalidParameter("a".to_owned())),
             },
         ];
         test_cases.iter().for_each(|case| {
