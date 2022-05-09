@@ -21,22 +21,6 @@ impl Debug for Value {
     }
 }
 
-/// Convert String to `Value`
-///
-/// # Examples
-///
-/// ```
-/// use evaluator_rs::Value;
-///
-/// let s: String = "hello".to_string();
-/// let x: Value = s.into();
-/// ```
-impl From<String> for Value {
-    fn from(string: String) -> Self {
-        Value::String(string)
-    }
-}
-
 /// Convert &str to `Value`
 ///
 /// # Examples
@@ -144,13 +128,10 @@ mod tests {
         assert_eq!(Value::Number(1.5), Value::from(1.5_f32),);
         assert_eq!(Value::Number(1.5), Value::from(1.5_f64),);
         assert_eq!(Value::Bool(true), Value::from(true),);
+
         assert_eq!(
             Value::String("hello world".to_owned()),
             Value::from("hello world"),
-        );
-        assert_eq!(
-            Value::String("hello world".to_owned()),
-            Value::from("hello world".to_owned()),
         );
     }
 
