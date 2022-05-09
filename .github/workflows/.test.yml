@@ -39,7 +39,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
-          args: --all --all-features --out Lcov -- --test-threads 1
+          args: --all --verbose --all-features --out Lcov
 
       - name: Upload Coverage
         uses: coverallsapp/github-action@master
