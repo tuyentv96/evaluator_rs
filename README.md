@@ -1,5 +1,5 @@
 # evaluator_rs
-[![evaluator_rs](https://github.com/tuyentv96/evaluator_rs/actions/workflows/.test.yml/badge.svg)](https://github.com/tuyentv96/evaluator_rs/actions/workflows/.test.yml) [![codecov](https://codecov.io/gh/tuyentv96/evaluator_rs/branch/master/graph/badge.svg?token=VIyh6tcPDv)](https://codecov.io/gh/tuyentv96/evaluator_rs)
+[![Build](https://github.com/tuyentv96/evaluator_rs/actions/workflows/.test.yml/badge.svg)](https://github.com/tuyentv96/evaluator_rs/actions/workflows/.test.yml) [![codecov](https://codecov.io/gh/tuyentv96/evaluator_rs/branch/master/graph/badge.svg?token=VIyh6tcPDv)](https://codecov.io/gh/tuyentv96/evaluator_rs) [![License:MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A evaluation engine library for Rust.
 
