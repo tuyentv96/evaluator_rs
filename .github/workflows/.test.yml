@@ -1,4 +1,4 @@
-name: evaluator_rs
+name: Test
 
 on: [push, pull_request]
 
