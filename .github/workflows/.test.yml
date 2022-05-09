@@ -9,17 +9,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Cache
+      - name: Cache dependencies
         uses: actions/cache@v2
+        env:
+          cache-name: cache-dependencies
         with:
           path: |
-            ~/.cargo/registry
-            ~/.cargo/git
             ~/.cargo/.crates.toml
             ~/.cargo/.crates2.json
             ~/.cargo/bin
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
             target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
