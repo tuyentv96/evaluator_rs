@@ -78,6 +78,7 @@ fn evaluate_equality_expr(
         EqualityOp::Eq => match (lhs, rhs) {
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l == *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l == *r)),
+            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l == *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Equality(*op),
@@ -87,6 +88,7 @@ fn evaluate_equality_expr(
         EqualityOp::Neq => match (lhs, rhs) {
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l != *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l != *r)),
+            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l != *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Equality(*op),
@@ -257,6 +259,22 @@ mod tests {
                 expr: "true || true",
                 want: Ok(Value::from(true)),
             },
+            TestCase {
+                expr: "1 || true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Logical(LogicalOp::Or),
+                    Value::from(true),
+                )),
+            },
+            TestCase {
+                expr: "1 && true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Logical(LogicalOp::And),
+                    Value::from(true),
+                )),
+            },
         ];
         test_cases.iter().for_each(|case| {
             let expr = parser::parse_expr(case.expr).unwrap();
@@ -302,6 +320,22 @@ mod tests {
                 expr: "3.5 - 1.5",
                 want: Ok(Value::from(2.0)),
             },
+            TestCase {
+                expr: "1 + false",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Additive(AdditiveOp::Add),
+                    Value::from(false),
+                )),
+            },
+            TestCase {
+                expr: "1 - false",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Additive(AdditiveOp::Sub),
+                    Value::from(false),
+                )),
+            },
         ];
         test_cases.iter().for_each(|case| {
             let expr = parser::parse_expr(case.expr).unwrap();
@@ -334,6 +368,38 @@ mod tests {
             TestCase {
                 expr: "2 * 1.1",
                 want: Ok(Value::from(2.2)),
+            },
+            TestCase {
+                expr: "10 % 3",
+                want: Ok(Value::from(1)),
+            },
+            TestCase {
+                expr: "10 % 2.5",
+                want: Ok(Value::from(0)),
+            },
+            TestCase {
+                expr: "1 * true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Multiplicative(MultiplicativeOp::Mul),
+                    Value::from(true),
+                )),
+            },
+            TestCase {
+                expr: "1 / true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Multiplicative(MultiplicativeOp::Div),
+                    Value::from(true),
+                )),
+            },
+            TestCase {
+                expr: "1 % false",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Multiplicative(MultiplicativeOp::Mod),
+                    Value::from(false),
+                )),
             },
         ];
         test_cases.iter().for_each(|case| {
@@ -387,6 +453,54 @@ mod tests {
             TestCase {
                 expr: "10.0 == 10",
                 want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "true == true",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "true != true",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "true == false",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "'hello' == 'hello'",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "'hello' == 'world'",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "'hello' != 'world'",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "1 == true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Equality(EqualityOp::Eq),
+                    Value::from(true),
+                )),
+            },
+            TestCase {
+                expr: "1 != true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Equality(EqualityOp::Neq),
+                    Value::from(true),
+                )),
+            },
+            TestCase {
+                expr: "1 in true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Equality(EqualityOp::In),
+                    Value::from(true),
+                )),
             },
         ];
         test_cases.iter().for_each(|case| {
@@ -448,6 +562,70 @@ mod tests {
             TestCase {
                 expr: "2.0 <= 2",
                 want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "true >= true",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "true >= false",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "true > true",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "true > false",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "false < false",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "false <= false",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "false < true",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "false <= true",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "1 > true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Relational(RelationalOp::Gt),
+                    Value::from(true),
+                )),
+            },
+            TestCase {
+                expr: "1 >= true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Relational(RelationalOp::Gte),
+                    Value::from(true),
+                )),
+            },
+            TestCase {
+                expr: "1 < true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Relational(RelationalOp::Lt),
+                    Value::from(true),
+                )),
+            },
+            TestCase {
+                expr: "1 <= true",
+                want: Err(EvaluatorError::InvalidOperation(
+                    Value::from(1),
+                    Op::Relational(RelationalOp::Lte),
+                    Value::from(true),
+                )),
             },
         ];
         test_cases.iter().for_each(|case| {
@@ -560,31 +738,6 @@ mod tests {
             TestCase {
                 expr: "(1 + 2) * 3",
                 want: Ok(Value::from(9)),
-            },
-        ];
-        test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
-            let output = super::evaluate(&expr, &empty_parameters);
-            assert_eq!(case.want, output, "expr: {}", case.expr);
-        });
-    }
-
-    #[test]
-    fn test_evaluate_invalid_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
-
-        let test_cases: Vec<TestCase> = vec![
-            TestCase {
-                expr: "1 && 2",
-                want: Err(EvaluatorError::InvalidOperation(
-                    Value::from(1),
-                    Op::Logical(LogicalOp::And),
-                    Value::from(2),
-                )),
-            },
-            TestCase {
-                expr: "{a} + 1",
-                want: Err(EvaluatorError::InvalidParameter("a".to_owned())),
             },
         ];
         test_cases.iter().for_each(|case| {
