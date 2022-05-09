@@ -41,13 +41,8 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: tarpaulin
-          args: --all --verbose --all-features --out Lcov
+          args: --all --verbose --all-features --out Lcov -- --test-threads 1
 
-      - name: Upload Coverage
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./lcov.info
       - name: Upload to CodeCov
         uses: codecov/codecov-action@v1
         with:
