@@ -109,3 +109,39 @@ impl Debug for RelationalOp {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_debug() {
+        assert_eq!(format!("{:?}", Op::Logical(LogicalOp::And)), "&&");
+        assert_eq!(format!("{:?}", Op::Logical(LogicalOp::Or)), "||");
+
+        assert_eq!(
+            format!("{:?}", Op::Multiplicative(MultiplicativeOp::Mul)),
+            "*"
+        );
+        assert_eq!(
+            format!("{:?}", Op::Multiplicative(MultiplicativeOp::Div)),
+            "/"
+        );
+        assert_eq!(
+            format!("{:?}", Op::Multiplicative(MultiplicativeOp::Mod)),
+            "%"
+        );
+
+        assert_eq!(format!("{:?}", Op::Additive(AdditiveOp::Add)), "+");
+        assert_eq!(format!("{:?}", Op::Additive(AdditiveOp::Sub)), "-");
+
+        assert_eq!(format!("{:?}", Op::Equality(EqualityOp::Eq)), "==");
+        assert_eq!(format!("{:?}", Op::Equality(EqualityOp::Neq)), "!=");
+        assert_eq!(format!("{:?}", Op::Equality(EqualityOp::In)), "in");
+
+        assert_eq!(format!("{:?}", Op::Relational(RelationalOp::Lt)), "<");
+        assert_eq!(format!("{:?}", Op::Relational(RelationalOp::Lte)), "<=");
+        assert_eq!(format!("{:?}", Op::Relational(RelationalOp::Gt)), ">");
+        assert_eq!(format!("{:?}", Op::Relational(RelationalOp::Gte)), ">=");
+    }
+}

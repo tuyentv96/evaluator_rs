@@ -14,7 +14,7 @@ impl Debug for Value {
         use self::Value::*;
         match &*self {
             Bool(n) => write!(fmt, "{:?}", n),
-            String(n) => write!(fmt, "{:?}", n.clone()),
+            String(n) => write!(fmt, "{:?}", &n),
             Number(n) => write!(fmt, "{:?}", n),
             Array(n) => write!(fmt, "{:?}", n),
         }
@@ -130,5 +130,44 @@ impl From<i32> for Value {
 impl From<bool> for Value {
     fn from(boolean: bool) -> Self {
         Value::Bool(boolean)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_from_value() {
+        assert_eq!(Value::Number(1.0), Value::from(1_i32),);
+        assert_eq!(Value::Number(1.0), Value::from(1_i64),);
+        assert_eq!(Value::Number(1.5), Value::from(1.5_f32),);
+        assert_eq!(Value::Number(1.5), Value::from(1.5_f64),);
+        assert_eq!(Value::Bool(true), Value::from(true),);
+        assert_eq!(
+            Value::String("hello world".to_owned()),
+            Value::from("hello world"),
+        );
+        assert_eq!(
+            Value::String("hello world".to_owned()),
+            Value::from("hello world".to_owned()),
+        );
+    }
+
+    #[test]
+    fn test_debug() {
+        assert_eq!(format!("{:?}", Value::Number(1.0)), "1.0");
+        assert_eq!(format!("{:?}", Value::Bool(true)), "true");
+        assert_eq!(
+            format!("{:?}", Value::String("hello world".to_owned())),
+            "\"hello world\""
+        );
+        assert_eq!(
+            format!(
+                "{:?}",
+                Value::Array(vec!(Value::from(1), Value::from(2), Value::from(3)))
+            ),
+            "[1.0, 2.0, 3.0]"
+        );
     }
 }

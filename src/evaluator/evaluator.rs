@@ -678,6 +678,7 @@ mod tests {
 
     #[test]
     fn test_parameter_expr() {
+        let empty_parameters: HashMap<String, Value> = HashMap::new();
         let test_cases: Vec<TestCaseWithParameters> = vec![
             TestCaseWithParameters {
                 expr: "{name} > 1",
@@ -708,6 +709,11 @@ mod tests {
                 expr: "{name} < 1",
                 parameters: HashMap::from([("name".to_string(), Value::from(2))]),
                 want: Ok(Value::from(false)),
+            },
+            TestCaseWithParameters {
+                expr: "{name} == 1",
+                parameters: empty_parameters,
+                want: Err(EvaluatorError::InvalidParameter("name".to_owned())),
             },
         ];
 
