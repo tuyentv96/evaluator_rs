@@ -149,7 +149,8 @@ mod tests {
 
     #[test]
     fn test_display() {
-        assert_eq!(format!("{}", Value::Number(1.0)), "1");
+        assert_eq!(format!("{}", Value::Number(1_f64)), "1");
+        assert_eq!(format!("{}", Value::Number(1.1)), "1.1");
         assert_eq!(format!("{}", Value::Bool(true)), "true");
         assert_eq!(
             format!("{}", Value::String("hello world".to_owned())),

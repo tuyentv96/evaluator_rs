@@ -77,6 +77,7 @@ fn evaluate_relational_expr(
         RelationalOp::Gt => match (lhs, rhs) {
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l > *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l > *r)),
+            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l > *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Relational(*op),
@@ -86,6 +87,7 @@ fn evaluate_relational_expr(
         RelationalOp::Gte => match (lhs, rhs) {
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l >= *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l >= *r)),
+            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l >= *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Relational(*op),
@@ -95,6 +97,7 @@ fn evaluate_relational_expr(
         RelationalOp::Lt => match (lhs, rhs) {
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l < *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l < *r)),
+            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l < *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Relational(*op),
@@ -104,6 +107,7 @@ fn evaluate_relational_expr(
         RelationalOp::Lte => match (lhs, rhs) {
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l <= *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l <= *r)),
+            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l <= *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Relational(*op),
@@ -114,6 +118,7 @@ fn evaluate_relational_expr(
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l == *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l == *r)),
             (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l == *r)),
+            (Value::Array(l), Value::Array(r)) => Ok(Value::Bool(*l == *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Relational(*op),
@@ -124,6 +129,7 @@ fn evaluate_relational_expr(
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l != *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l != *r)),
             (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l != *r)),
+            (Value::Array(l), Value::Array(r)) => Ok(Value::Bool(*l != *r)),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Relational(*op),
@@ -584,6 +590,50 @@ mod tests {
             TestCase {
                 expr: "false <= true",
                 want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "[1, 2] == [1, 2]",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "[1, 2, 3] == [1, 2]",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "[1, 2, 3] != [1, 2]",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "'2' > '1'",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "'2' >= '1'",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "'2' > '3'",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "'2' >= '3'",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "'2' < '3'",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "'2' < '1'",
+                want: Ok(Value::from(false)),
+            },
+            TestCase {
+                expr: "'2' <= '3'",
+                want: Ok(Value::from(true)),
+            },
+            TestCase {
+                expr: "'2' <= '1'",
+                want: Ok(Value::from(false)),
             },
             TestCase {
                 expr: "1 > true",
