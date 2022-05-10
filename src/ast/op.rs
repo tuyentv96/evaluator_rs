@@ -1,6 +1,6 @@
-use std::fmt::{Debug, Error, Formatter};
+use std::fmt::{Debug, Display, Error, Formatter};
 
-#[derive(Copy, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
 pub enum Op {
     Logical(LogicalOp),
     Equality(EqualityOp),
@@ -9,26 +9,26 @@ pub enum Op {
     Multiplicative(MultiplicativeOp),
 }
 
-#[derive(Copy, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
 pub enum LogicalOp {
     And,
     Or,
 }
 
-#[derive(Copy, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
 pub enum AdditiveOp {
     Add,
     Sub,
 }
 
-#[derive(Copy, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
 pub enum EqualityOp {
     Eq,
     Neq,
     In,
 }
 
-#[derive(Copy, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
 pub enum RelationalOp {
     Gt,
     Lt,
@@ -36,27 +36,27 @@ pub enum RelationalOp {
     Lte,
 }
 
-#[derive(Copy, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
 pub enum MultiplicativeOp {
     Mul,
     Div,
     Mod,
 }
 
-impl Debug for Op {
+impl Display for Op {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::Op::*;
         match *self {
-            Logical(o) => write!(fmt, "{:?}", o),
-            Equality(o) => write!(fmt, "{:?}", o),
-            Relational(o) => write!(fmt, "{:?}", o),
-            Additive(o) => write!(fmt, "{:?}", o),
-            Multiplicative(o) => write!(fmt, "{:?}", o),
+            Logical(o) => write!(fmt, "{}", o),
+            Equality(o) => write!(fmt, "{}", o),
+            Relational(o) => write!(fmt, "{}", o),
+            Additive(o) => write!(fmt, "{}", o),
+            Multiplicative(o) => write!(fmt, "{}", o),
         }
     }
 }
 
-impl Debug for LogicalOp {
+impl Display for LogicalOp {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::LogicalOp::*;
         match *self {
@@ -66,7 +66,7 @@ impl Debug for LogicalOp {
     }
 }
 
-impl Debug for MultiplicativeOp {
+impl Display for MultiplicativeOp {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::MultiplicativeOp::*;
         match *self {
@@ -77,7 +77,7 @@ impl Debug for MultiplicativeOp {
     }
 }
 
-impl Debug for AdditiveOp {
+impl Display for AdditiveOp {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::AdditiveOp::*;
         match *self {
@@ -87,7 +87,7 @@ impl Debug for AdditiveOp {
     }
 }
 
-impl Debug for EqualityOp {
+impl Display for EqualityOp {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::EqualityOp::*;
         match *self {
@@ -98,7 +98,7 @@ impl Debug for EqualityOp {
     }
 }
 
-impl Debug for RelationalOp {
+impl Display for RelationalOp {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::RelationalOp::*;
         match *self {
@@ -115,33 +115,33 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_debug() {
-        assert_eq!(format!("{:?}", Op::Logical(LogicalOp::And)), "&&");
-        assert_eq!(format!("{:?}", Op::Logical(LogicalOp::Or)), "||");
+    fn test_display() {
+        assert_eq!(format!("{}", Op::Logical(LogicalOp::And)), "&&");
+        assert_eq!(format!("{}", Op::Logical(LogicalOp::Or)), "||");
 
         assert_eq!(
-            format!("{:?}", Op::Multiplicative(MultiplicativeOp::Mul)),
+            format!("{}", Op::Multiplicative(MultiplicativeOp::Mul)),
             "*"
         );
         assert_eq!(
-            format!("{:?}", Op::Multiplicative(MultiplicativeOp::Div)),
+            format!("{}", Op::Multiplicative(MultiplicativeOp::Div)),
             "/"
         );
         assert_eq!(
-            format!("{:?}", Op::Multiplicative(MultiplicativeOp::Mod)),
+            format!("{}", Op::Multiplicative(MultiplicativeOp::Mod)),
             "%"
         );
 
-        assert_eq!(format!("{:?}", Op::Additive(AdditiveOp::Add)), "+");
-        assert_eq!(format!("{:?}", Op::Additive(AdditiveOp::Sub)), "-");
+        assert_eq!(format!("{}", Op::Additive(AdditiveOp::Add)), "+");
+        assert_eq!(format!("{}", Op::Additive(AdditiveOp::Sub)), "-");
 
-        assert_eq!(format!("{:?}", Op::Equality(EqualityOp::Eq)), "==");
-        assert_eq!(format!("{:?}", Op::Equality(EqualityOp::Neq)), "!=");
-        assert_eq!(format!("{:?}", Op::Equality(EqualityOp::In)), "in");
+        assert_eq!(format!("{}", Op::Equality(EqualityOp::Eq)), "==");
+        assert_eq!(format!("{}", Op::Equality(EqualityOp::Neq)), "!=");
+        assert_eq!(format!("{}", Op::Equality(EqualityOp::In)), "in");
 
-        assert_eq!(format!("{:?}", Op::Relational(RelationalOp::Lt)), "<");
-        assert_eq!(format!("{:?}", Op::Relational(RelationalOp::Lte)), "<=");
-        assert_eq!(format!("{:?}", Op::Relational(RelationalOp::Gt)), ">");
-        assert_eq!(format!("{:?}", Op::Relational(RelationalOp::Gte)), ">=");
+        assert_eq!(format!("{}", Op::Relational(RelationalOp::Lt)), "<");
+        assert_eq!(format!("{}", Op::Relational(RelationalOp::Lte)), "<=");
+        assert_eq!(format!("{}", Op::Relational(RelationalOp::Gt)), ">");
+        assert_eq!(format!("{}", Op::Relational(RelationalOp::Gte)), ">=");
     }
 }

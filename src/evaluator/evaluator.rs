@@ -11,7 +11,7 @@ use crate::ast::{
 pub enum EvaluatorError {
     #[error("invalid parameter {0}")]
     InvalidParameter(String),
-    #[error("invalid operation {0:?} {1:?} {2:?}")]
+    #[error("invalid operation {0} {1} {2}")]
     InvalidOperation(Value, Op, Value),
 }
 
