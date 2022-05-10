@@ -3,7 +3,6 @@ use std::fmt::{Debug, Display, Error, Formatter};
 #[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
 pub enum Op {
     Logical(LogicalOp),
-    Equality(EqualityOp),
     Relational(RelationalOp),
     Additive(AdditiveOp),
     Multiplicative(MultiplicativeOp),
@@ -22,18 +21,14 @@ pub enum AdditiveOp {
 }
 
 #[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
-pub enum EqualityOp {
-    Eq,
-    Neq,
-    In,
-}
-
-#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
 pub enum RelationalOp {
     Gt,
     Lt,
     Gte,
     Lte,
+    Eq,
+    Neq,
+    In,
 }
 
 #[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
@@ -48,7 +43,6 @@ impl Display for Op {
         use self::Op::*;
         match *self {
             Logical(o) => write!(fmt, "{}", o),
-            Equality(o) => write!(fmt, "{}", o),
             Relational(o) => write!(fmt, "{}", o),
             Additive(o) => write!(fmt, "{}", o),
             Multiplicative(o) => write!(fmt, "{}", o),
@@ -87,17 +81,6 @@ impl Display for AdditiveOp {
     }
 }
 
-impl Display for EqualityOp {
-    fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-        use self::EqualityOp::*;
-        match *self {
-            Eq => write!(fmt, "=="),
-            Neq => write!(fmt, "!="),
-            In => write!(fmt, "in"),
-        }
-    }
-}
-
 impl Display for RelationalOp {
     fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
         use self::RelationalOp::*;
@@ -106,6 +89,9 @@ impl Display for RelationalOp {
             Lt => write!(fmt, "<"),
             Gte => write!(fmt, ">="),
             Lte => write!(fmt, "<="),
+            Eq => write!(fmt, "=="),
+            Neq => write!(fmt, "!="),
+            In => write!(fmt, "in"),
         }
     }
 }
@@ -135,9 +121,9 @@ mod tests {
         assert_eq!(format!("{}", Op::Additive(AdditiveOp::Add)), "+");
         assert_eq!(format!("{}", Op::Additive(AdditiveOp::Sub)), "-");
 
-        assert_eq!(format!("{}", Op::Equality(EqualityOp::Eq)), "==");
-        assert_eq!(format!("{}", Op::Equality(EqualityOp::Neq)), "!=");
-        assert_eq!(format!("{}", Op::Equality(EqualityOp::In)), "in");
+        assert_eq!(format!("{}", Op::Relational(RelationalOp::Eq)), "==");
+        assert_eq!(format!("{}", Op::Relational(RelationalOp::Neq)), "!=");
+        assert_eq!(format!("{}", Op::Relational(RelationalOp::In)), "in");
 
         assert_eq!(format!("{}", Op::Relational(RelationalOp::Lt)), "<");
         assert_eq!(format!("{}", Op::Relational(RelationalOp::Lte)), "<=");

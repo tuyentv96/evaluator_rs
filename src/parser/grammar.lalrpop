@@ -1,7 +1,7 @@
 use std::str::FromStr;
 use crate::ast::{
     expr::Expr,
-    op::{AdditiveOp, EqualityOp, LogicalOp, MultiplicativeOp, Op, RelationalOp},
+    op::{AdditiveOp, LogicalOp, MultiplicativeOp, Op, RelationalOp},
     value::Value,
 };
 use crate::parser::parser::parse_parameter_name;
@@ -9,13 +9,12 @@ use crate::parser::parser::parse_parameter_name;
 grammar;
 
 pub Expr: Box<Expr> = {
-    Expr LogicalOp EqualityExpr => Box::new(Expr::Op(<>)),
-    EqualityExpr,
+    Expr LogicalOp RelationalExpr => Box::new(Expr::Op(<>)),
+    RelationalExpr,
 };
 
-pub EqualityExpr: Box<Expr> = {
-    EqualityExpr EqualityOp AdditiveExpr => Box::new(Expr::Op(<>)),
-    EqualityExpr RelationalOp AdditiveExpr => Box::new(Expr::Op(<>)),
+pub RelationalExpr: Box<Expr> = {
+    RelationalExpr RelationalOp AdditiveExpr => Box::new(Expr::Op(<>)),
     AdditiveExpr,
 }
 
@@ -34,17 +33,14 @@ LogicalOp: Op = {
     "||" => Op::Logical(LogicalOp::Or),
 };
 
-EqualityOp: Op = {
-    "==" => Op::Equality(EqualityOp::Eq),
-    "!=" => Op::Equality(EqualityOp::Neq),
-    "in" => Op::Equality(EqualityOp::In),
-};
-
 RelationalOp: Op = {
     ">" => Op::Relational(RelationalOp::Gt),
     "<" => Op::Relational(RelationalOp::Lt),
     ">=" => Op::Relational(RelationalOp::Gte),
     "<=" => Op::Relational(RelationalOp::Lte),
+    "==" => Op::Relational(RelationalOp::Eq),
+    "!=" => Op::Relational(RelationalOp::Neq),
+    "in" => Op::Relational(RelationalOp::In),
 };
 
 AdditiveOp: Op = {

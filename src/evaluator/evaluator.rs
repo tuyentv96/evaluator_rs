@@ -3,7 +3,7 @@ use thiserror::Error;
 
 use crate::ast::{
     expr::Expr,
-    op::{AdditiveOp, EqualityOp, LogicalOp, MultiplicativeOp, Op, RelationalOp},
+    op::{AdditiveOp, LogicalOp, MultiplicativeOp, Op, RelationalOp},
     value::Value,
 };
 
@@ -37,7 +37,6 @@ fn evaluate_op(
 
     match op {
         Op::Logical(o) => evaluate_logical_expr(&lr, o, &rr),
-        Op::Equality(o) => evaluate_equality_expr(&lr, o, &rr),
         Op::Relational(o) => evaluate_relational_expr(&lr, o, &rr),
         Op::Additive(o) => evaluate_additive_expr(&lr, o, &rr),
         Op::Multiplicative(o) => evaluate_multiplicative_expr(&lr, o, &rr),
@@ -63,45 +62,6 @@ fn evaluate_logical_expr(
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Logical(*op),
-                rhs.clone(),
-            )),
-        },
-    }
-}
-
-fn evaluate_equality_expr(
-    lhs: &Value,
-    op: &EqualityOp,
-    rhs: &Value,
-) -> Result<Value, EvaluatorError> {
-    match op {
-        EqualityOp::Eq => match (lhs, rhs) {
-            (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l == *r)),
-            (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l == *r)),
-            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l == *r)),
-            _ => Err(EvaluatorError::InvalidOperation(
-                lhs.clone(),
-                Op::Equality(*op),
-                rhs.clone(),
-            )),
-        },
-        EqualityOp::Neq => match (lhs, rhs) {
-            (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l != *r)),
-            (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l != *r)),
-            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l != *r)),
-            _ => Err(EvaluatorError::InvalidOperation(
-                lhs.clone(),
-                Op::Equality(*op),
-                rhs.clone(),
-            )),
-        },
-        EqualityOp::In => match (lhs, rhs) {
-            (Value::Number(_), Value::Array(r)) => Ok(Value::Bool(r.contains(lhs))),
-            (Value::String(_), Value::Array(r)) => Ok(Value::Bool(r.contains(lhs))),
-            (Value::Bool(_), Value::Array(r)) => Ok(Value::Bool(r.contains(lhs))),
-            _ => Err(EvaluatorError::InvalidOperation(
-                lhs.clone(),
-                Op::Equality(*op),
                 rhs.clone(),
             )),
         },
@@ -144,6 +104,36 @@ fn evaluate_relational_expr(
         RelationalOp::Lte => match (lhs, rhs) {
             (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l <= *r)),
             (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l <= *r)),
+            _ => Err(EvaluatorError::InvalidOperation(
+                lhs.clone(),
+                Op::Relational(*op),
+                rhs.clone(),
+            )),
+        },
+        RelationalOp::Eq => match (lhs, rhs) {
+            (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l == *r)),
+            (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l == *r)),
+            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l == *r)),
+            _ => Err(EvaluatorError::InvalidOperation(
+                lhs.clone(),
+                Op::Relational(*op),
+                rhs.clone(),
+            )),
+        },
+        RelationalOp::Neq => match (lhs, rhs) {
+            (Value::Bool(l), Value::Bool(r)) => Ok(Value::Bool(*l != *r)),
+            (Value::Number(l), Value::Number(r)) => Ok(Value::Bool(*l != *r)),
+            (Value::String(l), Value::String(r)) => Ok(Value::Bool(*l != *r)),
+            _ => Err(EvaluatorError::InvalidOperation(
+                lhs.clone(),
+                Op::Relational(*op),
+                rhs.clone(),
+            )),
+        },
+        RelationalOp::In => match (lhs, rhs) {
+            (Value::Number(_), Value::Array(r)) => Ok(Value::Bool(r.contains(lhs))),
+            (Value::String(_), Value::Array(r)) => Ok(Value::Bool(r.contains(lhs))),
+            (Value::Bool(_), Value::Array(r)) => Ok(Value::Bool(r.contains(lhs))),
             _ => Err(EvaluatorError::InvalidOperation(
                 lhs.clone(),
                 Op::Relational(*op),
@@ -482,7 +472,7 @@ mod tests {
                 expr: "1 == true",
                 want: Err(EvaluatorError::InvalidOperation(
                     Value::from(1),
-                    Op::Equality(EqualityOp::Eq),
+                    Op::Relational(RelationalOp::Eq),
                     Value::from(true),
                 )),
             },
@@ -490,7 +480,7 @@ mod tests {
                 expr: "1 != true",
                 want: Err(EvaluatorError::InvalidOperation(
                     Value::from(1),
-                    Op::Equality(EqualityOp::Neq),
+                    Op::Relational(RelationalOp::Neq),
                     Value::from(true),
                 )),
             },
@@ -498,7 +488,7 @@ mod tests {
                 expr: "1 in true",
                 want: Err(EvaluatorError::InvalidOperation(
                     Value::from(1),
-                    Op::Equality(EqualityOp::In),
+                    Op::Relational(RelationalOp::In),
                     Value::from(true),
                 )),
             },
