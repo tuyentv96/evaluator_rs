@@ -11,22 +11,6 @@ pub enum ParserError {
 lalrpop_mod!(pub grammar, "/parser/grammar.rs");
 
 /// Parse expr from str
-///
-/// # Examples
-///
-/// ```rust
-/// use evaluator_rs::*;
-///
-/// let expr = parse_expr()
-/// assert_eq!(
-///      *parse_expr("1 + 2").unwrap(),
-///      Expr::Op(
-///          Box::new(Expr::Value(Value::from(1))),
-///          Op::Additive(AdditiveOp::Add),
-///          Box::new(Expr::Value(Value::from(2))),
-///      )
-/// );
-/// ```
 pub fn parse_expr(expr_str: &str) -> Result<Box<Expr>, ParserError> {
     match grammar::ExprParser::new().parse(expr_str) {
         Ok(v) => Ok(v),

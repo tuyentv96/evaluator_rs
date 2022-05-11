@@ -14,6 +14,8 @@ Add to your `Cargo.toml`:
 evaluator_rs = "0.1.0"
 ```
 
+Examples:
+
 ```rust
 extern crate evaluator_rs;
 

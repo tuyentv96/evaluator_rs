@@ -15,6 +15,19 @@ pub enum EvaluatorError {
     InvalidOperation(Value, Op, Value),
 }
 
+/// evaluate expresstion with parameters
+///
+/// Examples:
+///
+/// ```
+/// use evaluator_rs::*;
+/// use std::collections::HashMap;
+///
+/// let expr = parse_expr("{a} + 2 + 3").unwrap();
+/// let parameters = HashMap::from([("a", Value::from(1))]);
+/// let rs = evaluate(&expr, &parameters).unwrap();
+/// assert_eq!(rs, Value::from(6));
+/// ```
 pub fn evaluate(expr: &Expr, parameters: &HashMap<&str, Value>) -> Result<Value, EvaluatorError> {
     match expr {
         Expr::Identifier(name) => match parameters.get(name.as_str()) {
