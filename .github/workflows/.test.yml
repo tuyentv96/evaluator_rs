@@ -37,6 +37,12 @@ jobs:
           version: latest
           use-tool-cache: true
 
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all
+
       - name: Coverage Report with tarpaulin
         uses: actions-rs/cargo@v1
         with:
