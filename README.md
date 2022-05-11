@@ -14,6 +14,40 @@ Add to your `Cargo.toml`:
 evaluator_rs = "0.1.0"
 ```
 
+```rust
+extern crate evaluator_rs;
+
+use std::collections::HashMap;
+
+use evaluator_rs::{evaluate, parse_expr, Value};
+
+fn main() {
+    let expr = parse_expr("{a} + 2 + 3").unwrap();
+    let parameters = HashMap::from([("a", Value::from(1))]);
+    let rs = evaluate(&expr, &parameters).unwrap();
+    assert_eq!(rs, Value::from(6));
+
+    let expr = parse_expr("{a} == 1").unwrap();
+    let parameters = HashMap::from([("a", Value::from(1))]);
+    let rs = evaluate(&expr, &parameters).unwrap();
+    assert_eq!(rs, Value::from(true));
+
+    let expr = parse_expr("{a} in [1, 2 , 3]").unwrap();
+    let parameters = HashMap::from([("a", Value::from(1))]);
+    let rs = evaluate(&expr, &parameters).unwrap();
+    assert_eq!(rs, Value::from(true));
+}
+```
+
+## Data types
+
+| Type | Examples |
+|----------|-------------|
+| Number | 1 |
+| String | 'hello world' |
+| Bool | true |
+| Array | [1, 2, 3] |
+
 ## Supported operators
 
 | Operator | Description |
@@ -30,6 +64,20 @@ evaluator_rs = "0.1.0"
 | * | Product |
 | / | Division |
 | in | Array contains |
+
+## Identifier
+
+Identfiers are wrapped by curly brace. When expression is evaluating, parameters must provide this identifier value.
+
+Examples:
+
+```rust
+    let expr = parse_expr("{a} in [1, 2 , 3]").unwrap();
+    let parameters = HashMap::from([("a", Value::from(1))]);
+    let rs = evaluate(&expr, &parameters).unwrap();
+    assert_eq!(rs, Value::from(true));
+```
+
 
 ## License
  * MIT license ([LICENSE-MIT](LICENSE-MIT) or

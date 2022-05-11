@@ -15,9 +15,9 @@ pub enum EvaluatorError {
     InvalidOperation(Value, Op, Value),
 }
 
-pub fn evaluate(expr: &Expr, parameters: &HashMap<String, Value>) -> Result<Value, EvaluatorError> {
+pub fn evaluate(expr: &Expr, parameters: &HashMap<&str, Value>) -> Result<Value, EvaluatorError> {
     match expr {
-        Expr::Identifier(name) => match parameters.get(name) {
+        Expr::Identifier(name) => match parameters.get(name.as_str()) {
             Some(v) => Ok(v.clone()),
             None => Err(EvaluatorError::InvalidParameter(name.to_string())),
         },
@@ -30,7 +30,7 @@ fn evaluate_op(
     lhs: &Expr,
     op: &Op,
     rhs: &Expr,
-    parameters: &HashMap<String, Value>,
+    parameters: &HashMap<&str, Value>,
 ) -> Result<Value, EvaluatorError> {
     let lr = evaluate(lhs, parameters)?;
     let rr = evaluate(rhs, parameters)?;
@@ -223,13 +223,13 @@ mod tests {
     #[allow(dead_code)]
     struct TestCaseWithParameters<'a> {
         expr: &'a str,
-        parameters: HashMap<String, Value>,
+        parameters: HashMap<&'a str, Value>,
         want: Result<Value, EvaluatorError>,
     }
 
     #[test]
     fn test_logical_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
+        let empty_parameters: HashMap<&str, Value> = HashMap::new();
         let test_cases: Vec<TestCase> = vec![
             TestCase {
                 expr: "true && true",
@@ -281,7 +281,7 @@ mod tests {
 
     #[test]
     fn test_additive_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
+        let empty_parameters: HashMap<&str, Value> = HashMap::new();
 
         let test_cases: Vec<TestCase> = vec![
             TestCase {
@@ -342,7 +342,7 @@ mod tests {
 
     #[test]
     fn test_multiplicative_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
+        let empty_parameters: HashMap<&str, Value> = HashMap::new();
 
         let test_cases: Vec<TestCase> = vec![
             TestCase {
@@ -407,7 +407,7 @@ mod tests {
 
     #[test]
     fn test_equality_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
+        let empty_parameters: HashMap<&str, Value> = HashMap::new();
 
         let test_cases: Vec<TestCase> = vec![
             TestCase {
@@ -508,7 +508,7 @@ mod tests {
 
     #[test]
     fn test_relational_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
+        let empty_parameters: HashMap<&str, Value> = HashMap::new();
 
         let test_cases: Vec<TestCase> = vec![
             TestCase {
@@ -677,7 +677,7 @@ mod tests {
 
     #[test]
     fn test_in_array_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
+        let empty_parameters: HashMap<&str, Value> = HashMap::new();
 
         let test_cases: Vec<TestCase> = vec![
             TestCase {
@@ -718,36 +718,36 @@ mod tests {
 
     #[test]
     fn test_parameter_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
+        let empty_parameters: HashMap<&str, Value> = HashMap::new();
         let test_cases: Vec<TestCaseWithParameters> = vec![
             TestCaseWithParameters {
                 expr: "{name} > 1",
-                parameters: HashMap::from([("name".to_string(), Value::from(2))]),
+                parameters: HashMap::from([("name", Value::from(2))]),
                 want: Ok(Value::from(true)),
             },
             TestCaseWithParameters {
                 expr: "{name} == 1",
-                parameters: HashMap::from([("name".to_string(), Value::from(1))]),
+                parameters: HashMap::from([("name", Value::from(1))]),
                 want: Ok(Value::from(true)),
             },
             TestCaseWithParameters {
                 expr: "{name} < 1",
-                parameters: HashMap::from([("name".to_string(), Value::from(0))]),
+                parameters: HashMap::from([("name", Value::from(0))]),
                 want: Ok(Value::from(true)),
             },
             TestCaseWithParameters {
                 expr: "{name} > 1",
-                parameters: HashMap::from([("name".to_string(), Value::from(0))]),
+                parameters: HashMap::from([("name", Value::from(0))]),
                 want: Ok(Value::from(false)),
             },
             TestCaseWithParameters {
                 expr: "{name} == 1",
-                parameters: HashMap::from([("name".to_string(), Value::from(0))]),
+                parameters: HashMap::from([("name", Value::from(0))]),
                 want: Ok(Value::from(false)),
             },
             TestCaseWithParameters {
                 expr: "{name} < 1",
-                parameters: HashMap::from([("name".to_string(), Value::from(2))]),
+                parameters: HashMap::from([("name", Value::from(2))]),
                 want: Ok(Value::from(false)),
             },
             TestCaseWithParameters {
@@ -766,7 +766,7 @@ mod tests {
 
     #[test]
     fn test_precedence_expr() {
-        let empty_parameters: HashMap<String, Value> = HashMap::new();
+        let empty_parameters: HashMap<&str, Value> = HashMap::new();
 
         let test_cases: Vec<TestCase> = vec![
             TestCase {
