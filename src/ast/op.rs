@@ -1,6 +1,9 @@
 use std::fmt::{Debug, Display, Error, Formatter};
 
-#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Copy, Serialize, Deserialize, Debug, Clone, PartialEq, PartialOrd)]
+#[serde(untagged)]
 pub enum Op {
     Logical(LogicalOp),
     Relational(RelationalOp),
@@ -8,19 +11,22 @@ pub enum Op {
     Multiplicative(MultiplicativeOp),
 }
 
-#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Serialize, Deserialize, Debug, Clone, PartialEq, PartialOrd)]
+#[serde(untagged)]
 pub enum LogicalOp {
     And,
     Or,
 }
 
-#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Serialize, Deserialize, Debug, Clone, PartialEq, PartialOrd)]
+#[serde(untagged)]
 pub enum AdditiveOp {
     Add,
     Sub,
 }
 
-#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Serialize, Deserialize, Debug, Clone, PartialEq, PartialOrd)]
+#[serde(untagged)]
 pub enum RelationalOp {
     Gt,
     Lt,
@@ -31,7 +37,8 @@ pub enum RelationalOp {
     In,
 }
 
-#[derive(Copy, Debug, Clone, PartialEq, PartialOrd)]
+#[derive(Copy, Serialize, Deserialize, Debug, Clone, PartialEq, PartialOrd)]
+#[serde(untagged)]
 pub enum MultiplicativeOp {
     Mul,
     Div,
@@ -93,6 +100,30 @@ impl Display for RelationalOp {
             Neq => write!(fmt, "!="),
             In => write!(fmt, "in"),
         }
+    }
+}
+
+impl From<LogicalOp> for Op {
+    fn from(op: LogicalOp) -> Self {
+        Op::Logical(op)
+    }
+}
+
+impl From<RelationalOp> for Op {
+    fn from(op: RelationalOp) -> Self {
+        Op::Relational(op)
+    }
+}
+
+impl From<AdditiveOp> for Op {
+    fn from(op: AdditiveOp) -> Self {
+        Op::Additive(op)
+    }
+}
+
+impl From<MultiplicativeOp> for Op {
+    fn from(op: MultiplicativeOp) -> Self {
+        Op::Multiplicative(op)
     }
 }
 

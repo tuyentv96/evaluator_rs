@@ -1,3 +1,4 @@
+use serde_json::Value as JsonValue;
 use std::fmt::{Display, Error, Formatter};
 
 /// Value used by by the parser and evaluator.
@@ -126,6 +127,25 @@ impl From<i32> for Value {
 impl From<bool> for Value {
     fn from(boolean: bool) -> Self {
         Value::Bool(boolean)
+    }
+}
+
+impl From<&JsonValue> for Value {
+    fn from(jv: &JsonValue) -> Self {
+        match jv {
+            JsonValue::String(v) => Value::String(v.clone()),
+            JsonValue::Number(v) => Value::Number(v.clone().as_f64().unwrap()),
+            JsonValue::Bool(v) => Value::Bool(*v),
+            JsonValue::Array(array) => {
+                let mut rs = vec![];
+                for v in array {
+                    rs.push(Value::from(v))
+                }
+
+                Value::Array(rs)
+            }
+            v => panic!("unsupport type {}", v),
+        }
     }
 }
 

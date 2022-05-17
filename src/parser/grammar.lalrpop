@@ -13,6 +13,13 @@ pub Expr: Box<Expr> = {
     RelationalExpr,
 };
 
+pub Op: Op = {
+    LogicalOp,
+    RelationalOp,
+    AdditiveOp,
+    MultiplicativeOp,
+}
+
 pub RelationalExpr: Box<Expr> = {
     RelationalExpr RelationalOp AdditiveExpr => Box::new(Expr::Op(<>)),
     AdditiveExpr,
@@ -78,7 +85,7 @@ Array<T>: Vec<T> = {
     }
 };
 
-Identifier: String = r#"\{[a-z][a-z0-9_]*\}"# => <>.to_string();
+pub Identifier: String = r#"\{[a-z][a-z0-9_]*\}"# => <>.to_string();
 BoolValue: bool = {
     "true" => true,
     "false" => false,
