@@ -138,6 +138,19 @@ mod tests {
             TestCase {
                 expr: r#"
                 {
+                    "lhs": "hello",
+                    "op": "==",
+                    "rhs": "hello" 
+                }"#,
+                want: Ok(Box::new(Expr::Op(
+                    Box::new(Expr::Value(Value::from("hello"))),
+                    Op::Relational(RelationalOp::Eq),
+                    Box::new(Expr::Value(Value::from("hello"))),
+                ))),
+            },
+            TestCase {
+                expr: r#"
+                {
                     "lhs": 4,
                     "op": "in",
                     "rhs": [4, 5, 6] 
@@ -188,6 +201,15 @@ mod tests {
                         Box::new(Expr::Identifier("bar".to_owned())),
                     )),
                 ))),
+            },
+            TestCase {
+                expr: r#"
+                {
+                    "lhs": 3,
+                }"#,
+                want: Err(ParserError::InvalidExpr(
+                    "trailing comma at line 4 column 17".to_owned(),
+                )),
             },
             TestCase {
                 expr: r#"

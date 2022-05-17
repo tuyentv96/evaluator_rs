@@ -161,4 +161,15 @@ mod tests {
         assert_eq!(format!("{}", Op::Relational(RelationalOp::Gt)), ">");
         assert_eq!(format!("{}", Op::Relational(RelationalOp::Gte)), ">=");
     }
+
+    #[test]
+    fn test_convert_op() {
+        assert_eq!(Op::Logical(LogicalOp::And), Op::from(LogicalOp::And));
+        assert_eq!(Op::Additive(AdditiveOp::Add), Op::from(AdditiveOp::Add));
+        assert_eq!(Op::Relational(RelationalOp::Eq), Op::from(RelationalOp::Eq));
+        assert_eq!(
+            Op::Multiplicative(MultiplicativeOp::Mul),
+            Op::from(MultiplicativeOp::Mul)
+        );
+    }
 }
