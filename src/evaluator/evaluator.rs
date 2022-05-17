@@ -286,7 +286,7 @@ mod tests {
             },
         ];
         test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
+            let expr = parser::parse_expr_from_str(case.expr).unwrap();
             let output = super::evaluate(&expr, &empty_parameters);
             assert_eq!(case.want, output, "expr: {}", case.expr);
         });
@@ -347,7 +347,7 @@ mod tests {
             },
         ];
         test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
+            let expr = parser::parse_expr_from_str(case.expr).unwrap();
             let output = super::evaluate(&expr, &empty_parameters);
             assert_eq!(case.want, output, "expr: {}", case.expr);
         });
@@ -412,7 +412,7 @@ mod tests {
             },
         ];
         test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
+            let expr = parser::parse_expr_from_str(case.expr).unwrap();
             let output = super::evaluate(&expr, &empty_parameters);
             assert_eq!(case.want, output, "expr: {}", case.expr);
         });
@@ -513,7 +513,7 @@ mod tests {
             },
         ];
         test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
+            let expr = parser::parse_expr_from_str(case.expr).unwrap();
             let output = super::evaluate(&expr, &empty_parameters);
             assert_eq!(case.want, output, "expr: {}", case.expr);
         });
@@ -682,7 +682,7 @@ mod tests {
             },
         ];
         test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
+            let expr = parser::parse_expr_from_str(case.expr).unwrap();
             let output = super::evaluate(&expr, &empty_parameters);
             assert_eq!(case.want, output, "expr: {}", case.expr);
         });
@@ -723,7 +723,7 @@ mod tests {
             },
         ];
         test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
+            let expr = parser::parse_expr_from_str(case.expr).unwrap();
             let output = super::evaluate(&expr, &empty_parameters);
             assert_eq!(case.want, output, "expr: {}", case.expr);
         });
@@ -771,7 +771,7 @@ mod tests {
         ];
 
         test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
+            let expr = parser::parse_expr_from_str(case.expr).unwrap();
             let output = super::evaluate(&expr, &case.parameters);
             assert_eq!(case.want, output, "expr: {}", case.expr);
         });
@@ -800,7 +800,7 @@ mod tests {
             },
         ];
         test_cases.iter().for_each(|case| {
-            let expr = parser::parse_expr(case.expr).unwrap();
+            let expr = parser::parse_expr_from_str(case.expr).unwrap();
             let output = super::evaluate(&expr, &empty_parameters);
             assert_eq!(case.want, output, "expr: {}", case.expr);
         });
