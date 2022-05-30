@@ -25,6 +25,18 @@ pub enum ParserError {
 lalrpop_mod!(pub grammar, "/parser/grammar.rs");
 
 /// Parse expression from str
+///
+/// # Examples
+///
+/// ```
+/// use evaluator_rs::*;
+/// use std::collections::HashMap;
+///
+/// let expr = parse_expr_from_str("{a} + 2 + 3").unwrap();
+/// let parameters = HashMap::from([("a", Value::from(4))]);
+/// let rs = evaluate(&expr, &parameters).unwrap();
+/// assert_eq!(rs, Value::from(9));
+/// ```
 pub fn parse_expr_from_str(expr_str: &str) -> Result<Box<Expr>, ParserError> {
     match grammar::ExprParser::new().parse(expr_str) {
         Ok(v) => Ok(v),
@@ -32,7 +44,24 @@ pub fn parse_expr_from_str(expr_str: &str) -> Result<Box<Expr>, ParserError> {
     }
 }
 
-// Parse expression from json
+/// Parse expression from json
+///
+/// # Examples
+///
+/// ```
+/// use evaluator_rs::*;
+/// use std::collections::HashMap;
+///
+/// let json_expr = r#"{
+///     "lhs": "{a}",
+///     "op": "in",
+///     "rhs": [4, 5, 6]
+/// }"#;
+/// let expr = parse_expr_from_json(json_expr).unwrap();
+/// let parameters = HashMap::from([("a", Value::from(4))]);
+/// let rs = evaluate(&expr, &parameters).unwrap();
+/// assert_eq!(rs, Value::from(true));
+/// ```
 pub fn parse_expr_from_json(expr_str: &str) -> Result<Box<Expr>, ParserError> {
     match serde_json::from_str::<serde_json::Value>(expr_str) {
         Ok(value) => parse_expr_from_json_value(&value),

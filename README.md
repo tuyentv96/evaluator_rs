@@ -24,18 +24,25 @@ use std::collections::HashMap;
 use evaluator_rs::{evaluate, parse_expr, Value};
 
 fn main() {
+    // from str expression
     let expr = parse_expr("{a} + 2 + 3").unwrap();
     let parameters = HashMap::from([("a", Value::from(1))]);
     let rs = evaluate(&expr, &parameters).unwrap();
     assert_eq!(rs, Value::from(6));
 
-    let expr = parse_expr("{a} == 1").unwrap();
+    let expr = parse_expr_from_str("{a} in [1, 2 , 3]").unwrap();
     let parameters = HashMap::from([("a", Value::from(1))]);
     let rs = evaluate(&expr, &parameters).unwrap();
     assert_eq!(rs, Value::from(true));
 
-    let expr = parse_expr("{a} in [1, 2 , 3]").unwrap();
-    let parameters = HashMap::from([("a", Value::from(1))]);
+    // from json expression
+    let json_expr = r#"{
+        "lhs": "{a}",
+        "op": "in",
+        "rhs": [4, 5, 6] 
+    }"#
+    let expr = parse_expr_from_json(json_expr).unwrap();
+    let parameters = HashMap::from([("a", Value::from(4))]);
     let rs = evaluate(&expr, &parameters).unwrap();
     assert_eq!(rs, Value::from(true));
 }
@@ -52,24 +59,24 @@ fn main() {
 
 ## Supported operators
 
-| Operator | Description |
-|----------|-------------|
-| && | And |
-| \|\| | Or |
-| == | Equal |
-| > | Greater than |
-| >= | Greater than or equal |
-| < | Lower than |
-| <= | Lower than or equal |
-| + | Sum |
-| - | Sub |
-| * | Product |
-| / | Division |
-| in | Array contains |
+| Operator | Precedence | Description |
+|----------|-------------|-------------|
+| && | 1 | And |
+| \|\| | 1 | Or |
+| == | 2 | Equal |
+| > | 2 | Greater than |
+| >= | 2 | Greater than or equal |
+| < | 2 | Lower than |
+| <= | 2 | Lower than or equal |
+| in | 2 | Array contains |
+| * | 3 | Product |
+| / | 3 | Division |
+| + | 4 | Sum |
+| - | 4 | Sub |
 
 ## Identifier
 
-Identfiers are wrapped by curly brace. When expression is evaluating, parameters must provide this identifier value.
+Identifiers are wrapped by curly brace. When expression is evaluated, parameters must be provided identifier value.
 
 Examples:
 
