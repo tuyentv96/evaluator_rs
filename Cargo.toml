@@ -9,7 +9,7 @@ readme = "README.md"
 repository = "https://github.com/tuyentv96/evaluator_rs.git"
 documentation = "https://docs.rs/evaluator_rs"
 homepage = "https://github.com/tuyentv96/evaluator_rs"
-keywords = ["expression", "evaluate", "evaluator", "rule", "engines", "rule-engines"]
+keywords = ["expression", "evaluate", "evaluator", "rules", "engines"]
 categories = ["engines", "evaluate", "evaluator", "expression"]
 
 [build-dependencies]
