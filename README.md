@@ -11,7 +11,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-evaluator_rs = "0.1.0"
+evaluator_rs = "0.1"
 ```
 
 Examples:
@@ -40,7 +40,7 @@ fn main() {
         "lhs": "{a}",
         "op": "in",
         "rhs": [4, 5, 6] 
-    }"#
+    }"#;
     let expr = parse_expr_from_json(json_expr).unwrap();
     let parameters = HashMap::from([("a", Value::from(4))]);
     let rs = evaluate(&expr, &parameters).unwrap();
