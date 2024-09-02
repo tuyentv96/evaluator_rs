@@ -106,7 +106,7 @@ name = "evaluator_rs"
 version = "0.1.4"
 dependencies = [
  "lalrpop",
- "lalrpop-util",
+ "lalrpop-util 0.21.0",
  "regex",
  "serde",
  "serde_json",
@@ -171,7 +171,7 @@ dependencies = [
  "bit-set",
  "ena",
  "itertools",
- "lalrpop-util",
+ "lalrpop-util 0.20.2",
  "petgraph",
  "pico-args",
  "regex",
@@ -188,6 +188,15 @@ name = "lalrpop-util"
 version = "0.20.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "507460a910eb7b32ee961886ff48539633b788a36b65692b95f225b844c82553"
+dependencies = [
+ "regex-automata",
+]
+
+[[package]]
+name = "lalrpop-util"
+version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "108dc8f5dabad92c65a03523055577d847f5dcc00f3e7d3a68bc4d48e01d8fe1"
 dependencies = [
  "regex-automata",
 ]

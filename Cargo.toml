@@ -16,7 +16,7 @@ categories = ["parsing", "parser-implementations", "game-engines"]
 lalrpop = "^0.20"
 
 [dependencies]
-lalrpop-util = { version = "^0.20", features = ["lexer"] }
+lalrpop-util = { version = "^0.21", features = ["lexer"] }
 regex = "1"
 thiserror = "1.0"
 serde_json = "1.0"
