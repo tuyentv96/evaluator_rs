@@ -13,7 +13,7 @@ keywords = ["expression", "evaluate", "evaluator", "rules", "engines"]
 categories = ["parsing", "parser-implementations", "game-engines"]
 
 [build-dependencies]
-lalrpop = "^0.20"
+lalrpop = "^0.21"
 
 [dependencies]
 lalrpop-util = { version = "^0.20", features = ["lexer"] }
